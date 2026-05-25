@@ -1,5 +1,7 @@
 node_modules/
-ios/App/Pods/
-ios/App/App.xcworkspace/xcuserdata/
-*.DS_Store
+signing/
+*.p12
+*.p8
+*.mobileprovision
+.env*
 build/
