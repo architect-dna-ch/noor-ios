@@ -1,6 +1,6 @@
 workflows:
   release-to-store:
-    name: VOID FREQ Release to App Store
+    name: NOOR Release to App Store
     max_build_duration: 10
     instance_type: mac_mini_m2
 
@@ -41,7 +41,7 @@ workflows:
             except urllib.error.HTTPError as e:
               print(e.read().decode()); sys.exit(1)
 
-          apps = api('GET', '/v1/apps?filter[bundleId]=ch.architectdna.voidfreq')
+          apps = api('GET', '/v1/apps?filter[bundleId]=ch.architectdna.noor')
           print('apps:', json.dumps(apps.get('data',[{}])[0].get('attributes',{})))
           app_id = apps['data'][0]['id']
           print(f"App ID: {app_id}")
@@ -59,7 +59,7 @@ workflows:
           EOF
 
   ios-release:
-    name: VOID FREQ iOS Release
+    name: NOOR iOS Release
     max_build_duration: 60
     instance_type: mac_mini_m2
 
@@ -70,7 +70,7 @@ workflows:
       xcode: 26
       node: 24
       vars:
-        BUNDLE_ID: ch.architectdna.voidfreq
+        BUNDLE_ID: ch.architectdna.noor
         TEAM_ID: V28MG47TZC
       groups:
         - signing
@@ -120,7 +120,7 @@ workflows:
             -archivePath build/App.xcarchive \
             archive \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="VoidFreq Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="NOOR Distribution" \
             CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=$TEAM_ID
 

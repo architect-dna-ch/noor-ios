@@ -14,8 +14,8 @@
   <string>manual</string>
   <key>provisioningProfiles</key>
   <dict>
-    <key>ch.architectdna.voidfreq</key>
-    <string>VoidFreq Distribution</string>
+    <key>ch.architectdna.noor</key>
+    <string>Noor Distribution</string>
   </dict>
 </dict>
 </plist>

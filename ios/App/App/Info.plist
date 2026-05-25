@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>VOID FREQ</string>
+        <string>NOOR</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -50,6 +50,6 @@
 <key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>VOID FREQ does not use the microphone.</string>
+	<string>NOOR does not use the microphone.</string>
 </dict>
 </plist>
