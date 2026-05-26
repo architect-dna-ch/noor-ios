@@ -205,11 +205,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 <div id="paywall">
   <button class="pw-close" onclick="closePaywall()">✕</button>
   <div class="pw-icon">✦</div>
-  <div class="pw-title">NOOR <span>Premium</span></div>
-  <div class="pw-sub">AI-powered evening reflections with a relevant Quran ayah. Private. Never stored.</div>
+  <div class="pw-title">AI <span>Reflection</span></div>
+  <div class="pw-sub">Evening reflection powered by AI. Get a personalised response + a Quran ayah for your day. Once. Forever.</div>
   <div class="pw-price">$4.99</div>
-  <div class="pw-price-sub">one-time · no subscription</div>
-  <button class="pw-btn" onclick="unlockPremium()">Unlock Premium</button>
+  <div class="pw-price-sub">one-time purchase · no subscription ever</div>
+  <button class="pw-btn" id="pw-buy-btn" onclick="unlockPremium()">Unlock — $4.99</button>
   <button class="pw-restore" onclick="restorePurchase()">Restore Purchase</button>
 </div>
 
@@ -385,6 +385,7 @@ const PREMIUM = S('premium')==='1';
 const GROQ_KEY = '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';
 
 async function doReflect(){
+  if(S('premium')!=='1'){ showPaywall(); return; }
   const text = document.getElementById('reflect-input').value.trim();
   if(!text) return;
   const btn = document.getElementById('reflect-btn');
@@ -418,16 +419,46 @@ async function doReflect(){
 }
 
 // ── PAYWALL ──
+const PRODUCT_ID = 'ch.architectdna.noor.reflection';
+
 function showPaywall(){ document.getElementById('paywall').classList.add('show'); }
 function closePaywall(){ document.getElementById('paywall').classList.remove('show'); }
-function unlockPremium(){
-  // In production: StoreKit via Capacitor plugin
-  // For now simulate unlock
-  W('premium','1');
-  closePaywall();
-  alert('Premium unlocked! ✦');
+
+async function unlockPremium(){
+  const btn = document.getElementById('pw-buy-btn');
+  btn.textContent = 'Processing…';
+  btn.disabled = true;
+  try {
+    // StoreKit via Capacitor (available on device, not browser)
+    if(window.Capacitor?.isNativePlatform()){
+      const { InAppPurchase2 } = await import('./plugins/iap.js').catch(()=>({}));
+      // Fallback: use window plugin if registered
+      const iap = window.CdvPurchase || window.store;
+      if(iap){
+        iap.order(PRODUCT_ID);
+        iap.when(PRODUCT_ID).approved(p=>{ p.finish(); W('premium','1'); closePaywall(); });
+        return;
+      }
+    }
+    // Browser / TestFlight simulation
+    W('premium','1');
+    closePaywall();
+    document.getElementById('reflect-btn').textContent = 'Get Reflection ✦';
+  } catch(e){
+    btn.textContent = 'Unlock — $4.99';
+    btn.disabled = false;
+  }
 }
-function restorePurchase(){ unlockPremium(); }
+
+async function restorePurchase(){
+  if(window.Capacitor?.isNativePlatform()){
+    const iap = window.CdvPurchase || window.store;
+    if(iap){ iap.refresh(); return; }
+  }
+  // Simulate restore in browser
+  if(S('premium')==='1'){ closePaywall(); }
+  else alert('No purchase found.');
+}
 
 // ── NAV ──
 function switchTab(name, btn){
