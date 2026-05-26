@@ -1,12 +1,12 @@
-app_identifier "ch.architectdna.voidfreq"
+app_identifier "ch.architectdna.noor"
 username "systems@architect-dna.ch"
 
-name({ "en-US" => "VOID FREQ — Focus Studio" })
-subtitle({ "en-US" => "Ambient Sound for Deep Focus" })
+name({ "en-US" => "NOOR — Dhikr & Reflection" })
+subtitle({ "en-US" => "Daily Islamic Remembrance" })
 
 
-primary_category "PRODUCTIVITY"
-secondary_category "MUSIC"
+primary_category "LIFESTYLE"
+secondary_category "HEALTH_AND_FITNESS"
 
 
 copyright "© 2026 Muharrem Akdemir"

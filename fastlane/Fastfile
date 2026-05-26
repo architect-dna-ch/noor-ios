@@ -31,7 +31,7 @@ platform :ios do
         last_name:    "Akdemir",
         phone_number: "+41784479143",
         email_address: "systems@architect-dna.ch",
-        notes: "Standard ambient audio app. No login required. No in-app purchases. All audio generated locally via Web Audio API."
+        notes: "Islamic dhikr counter app. No login required. No in-app purchases. All data stored locally on device."
       }
     )
     UI.success "Metadata pushed ✓"
@@ -45,9 +45,9 @@ platform :ios do
       configuration:  "Release",
       export_method:  "app-store",
       output_directory: "./build",
-      output_name:    "VoidFreq.ipa"
+      output_name:    "Noor.ipa"
     )
-    UI.success "Build complete → ./build/VoidFreq.ipa"
+    UI.success "Build complete → ./build/Noor.ipa"
   end
 
   # ── Upload IPA to TestFlight ───────────────────────────────────────────────

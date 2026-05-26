@@ -1,30 +1,20 @@
-VOID FREQ is a precision ambient sound studio built for focus, flow, and deep work.
+NOOR is a calm, focused companion for your daily Islamic remembrance — built for Muslims who want to stay connected to Allah without distractions.
 
-Five channels. Zero distractions.
+DHIKR COUNTER
+Tap to count Subhan Allah, Alhamdulillah, Allahu Akbar, and more. Gold ring fills as you reach your goal (33 or 99). Your count is saved across sessions.
 
-FOCUS
-Brown noise + 40Hz gamma entrainment. Scientifically associated with sustained concentration. The baseline for any serious session.
+DUA LIBRARY
+Curated duas for anxiety, gratitude, morning, evening, travel, and more. Arabic text, transliteration, and meaning — all offline.
 
-RAIN
-Layered rainfall with sub-bass rumble and natural variation. Masks office noise. Dissolves mental chatter.
+DAILY REFLECTION
+A private space to write thoughts, intentions, and gratitude. Completely local — nothing leaves your device.
 
-VOID
-Five pure sine oscillators at sub-bass frequencies (30–120Hz). An isolation chamber for the mind. Nothing else.
+WINS TRACKER
+Note your small and big victories each day. Build momentum. See your growth.
 
-LO-FI
-A full lo-fi beat engine running in real time. Jazz chords, analog-style kick and hihat, vinyl crackle, tape warble LFO. Warm and human.
-
-NEURONS
-Binaural beats at 10Hz alpha differential. Left ear 200Hz, right ear 210Hz. Wear headphones. Let your brain synchronize.
-
-HOW IT WORKS
-Every sound is generated live using the Web Audio API — no streaming, no server, no subscription. Works offline. Continues in background. Your battery thanks you.
-
-LIVE VISUALIZER
-A real-time FFT visualizer reacts to every frequency shift. Watch the sound while you hear it.
-
-WHO IT'S FOR
-Anyone who needs to think clearly: developers, designers, writers, students, traders, architects.
+PRIVATE BY DESIGN
+No account. No cloud sync. No tracking. Everything stays on your iPhone.
+No ads. No subscriptions. Pay once.
 
 Built by Architect-DNA · Bern, Switzerland.
-Questions or feedback: systems@architect-dna.ch
+Questions: systems@architect-dna.ch
