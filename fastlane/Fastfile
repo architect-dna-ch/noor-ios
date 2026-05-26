@@ -1,7 +1,7 @@
 default_platform(:ios)
 
 BUNDLE_ID = "ch.architectdna.noor"
-APP_NAME  = "NOOR"
+APP_NAME  = "Noor — Dhikr & Reflection"
 
 platform :ios do
 
