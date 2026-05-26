@@ -22,7 +22,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 /* ── SHELL ── */
 #shell{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-top)}
 #topbar{padding:12px 20px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.app-name{font-size:22px;font-weight:900;letter-spacing:-.04em;color:var(--gold)}
+.app-name{font-size:20px;font-weight:900;letter-spacing:-.04em;color:var(--gold)}
 .app-name span{color:var(--text3);font-weight:400;font-size:13px;margin-left:6px;letter-spacing:.08em}
 .prayer-pill{font-size:11px;font-weight:700;color:var(--text3);background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:5px 12px}
 
@@ -131,7 +131,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 <div id="shell">
   <div id="topbar">
-    <div class="app-name">نور <span>NOOR</span></div>
+    <div class="app-name">نور NOOR</div>
     <div class="prayer-pill" id="next-prayer-pill">loading…</div>
   </div>
 
@@ -169,7 +169,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <button class="reflect-btn" id="reflect-btn" onclick="doReflect()">Get Reflection ✦</button>
       </div>
       <div id="reflect-result"></div>
-      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text3)">Powered by Claude · stays on device</div>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text3)">Powered by Groq · stays on device</div>
     </div>
 
     <!-- ── WINS ── -->
@@ -382,8 +382,9 @@ function renderPrayer(){
 
 // ── REFLECT (Premium) ──
 const PREMIUM = S('premium')==='1';
+const GROQ_KEY = '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';
+
 async function doReflect(){
-  if(!PREMIUM){ showPaywall(); return; }
   const text = document.getElementById('reflect-input').value.trim();
   if(!text) return;
   const btn = document.getElementById('reflect-btn');
@@ -391,25 +392,27 @@ async function doReflect(){
   const res = document.getElementById('reflect-result');
   res.innerHTML='<div class="ai-response"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'x-api-key':S('api_key')||'','anthropic-version':'2023-06-01','content-type':'application/json'},
+      headers:{'Authorization':'Bearer '+GROQ_KEY,'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
+        model:'llama-3.3-70b-versatile',
         max_tokens:300,
-        system:'You are a gentle Islamic reflection companion. Given a user\'s day, reply in 2-3 warm sentences of reflection, then end with one short relevant Quran ayah in Arabic followed by its reference (Surah:Ayah). Keep it concise.',
-        messages:[{role:'user',content:text}]
+        messages:[
+          {role:'system',content:'You are a gentle Islamic reflection companion. Given a user\'s day, reply in 2-3 warm sentences of reflection, then on a new paragraph write one short relevant Quran ayah in Arabic followed by its reference in brackets like [Al-Inshirah 94:5]. Keep it concise.'},
+          {role:'user',content:text}
+        ]
       })
     });
     const data = await r.json();
-    const reply = data.content?.[0]?.text||'Could not reach server.';
+    const reply = data.choices?.[0]?.message?.content||'Could not reach server.';
     const parts = reply.split('\n\n');
     const reflection = parts.slice(0,-1).join('\n\n');
     const ayah = parts[parts.length-1];
     res.innerHTML=`<div class="ai-response"><div class="ai-response-text">${reflection}</div><div class="ai-ayah">${ayah}</div></div>`;
     W('reflect_'+TODAY, {text, reply});
   }catch(e){
-    res.innerHTML='<div class="ai-response"><div class="ai-response-text" style="color:var(--text3)">Set your API key in settings to use reflections.</div></div>';
+    res.innerHTML='<div class="ai-response"><div class="ai-response-text" style="color:var(--text3)">Connection error. Try again.</div></div>';
   }
   btn.disabled=false;
 }
