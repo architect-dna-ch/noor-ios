@@ -72,6 +72,9 @@ workflows:
       vars:
         BUNDLE_ID: ch.architectdna.noor
         TEAM_ID: V28MG47TZC
+      groups:
+        - signing
+        - apple_credentials
 
     scripts:
       - name: Install dependencies
@@ -80,26 +83,25 @@ workflows:
       - name: Sync Capacitor
         script: npx cap sync ios
 
-      - name: Setup signing
+      - name: Install signing assets
         script: |
+          security create-keychain -p cmpass build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p cmpass build.keychain
+          security set-keychain-settings -t 7200 -u build.keychain
+
+          echo "$DIST_P12_BASE64" | base64 --decode > /tmp/dist.p12
+          security import /tmp/dist.p12 -k build.keychain -P "$DIST_P12_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k cmpass build.keychain
+
           pip3 install codemagic-cli-tools -q
-
-          # Register app if not exists, then fetch/create cert + profile
-          app-store-connect apps list --bundle-id-suffix noor || \
-            app-store-connect create-app \
-              --bundle-id $BUNDLE_ID \
-              --name "NOOR — Dhikr & Reflection" \
-              --primary-locale en-US \
-              --sku noor-001 \
-              --version-string 1.0.0
-
-          app-store-connect fetch-signing-files $BUNDLE_ID \
+          app-store-connect fetch-signing-files \
+            $BUNDLE_ID \
             --type IOS_APP_STORE \
-            --create
-
-          app-store-connect create-keychain
-          app-store-connect add-certificates
-          app-store-connect use-profiles
+            --create \
+            --private-key "$ASC_PRIVATE_KEY" \
+            --key-id "$ASC_KEY_ID" \
+            --issuer-id "$ASC_ISSUER_ID"
 
       - name: Resolve Swift packages
         script: |
@@ -116,6 +118,8 @@ workflows:
             -archivePath build/App.xcarchive \
             archive \
             CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER="NOOR Distribution" \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=$TEAM_ID
 
           xcodebuild \
