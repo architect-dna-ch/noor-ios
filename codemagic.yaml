@@ -69,9 +69,6 @@ workflows:
     environment:
       xcode: 16
       node: 22
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: ch.architectdna.noor
       vars:
         BUNDLE_ID: ch.architectdna.noor
         TEAM_ID: V28MG47TZC
@@ -82,6 +79,27 @@ workflows:
 
       - name: Sync Capacitor
         script: npx cap sync ios
+
+      - name: Setup signing
+        script: |
+          pip3 install codemagic-cli-tools -q
+
+          # Register app if not exists, then fetch/create cert + profile
+          app-store-connect apps list --bundle-id-suffix noor || \
+            app-store-connect create-app \
+              --bundle-id $BUNDLE_ID \
+              --name "NOOR — Dhikr & Reflection" \
+              --primary-locale en-US \
+              --sku noor-001 \
+              --version-string 1.0.0
+
+          app-store-connect fetch-signing-files $BUNDLE_ID \
+            --type IOS_APP_STORE \
+            --create
+
+          app-store-connect create-keychain
+          app-store-connect add-certificates
+          app-store-connect use-profiles
 
       - name: Resolve Swift packages
         script: |
@@ -97,7 +115,7 @@ workflows:
             -configuration Release \
             -archivePath build/App.xcarchive \
             archive \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=$TEAM_ID
 
           xcodebuild \
