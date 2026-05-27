@@ -82,7 +82,9 @@ workflows:
 
       - name: Setup signing
         script: |
-          pip3 install codemagic-cli-tools -q
+          /usr/bin/python3 -m venv /tmp/asc-env
+          source /tmp/asc-env/bin/activate
+          pip install codemagic-cli-tools -q
           app-store-connect fetch-signing-files $BUNDLE_ID \
             --type IOS_APP_STORE \
             --create
